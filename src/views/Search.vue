@@ -24,13 +24,14 @@
         <div class="count">
           {{ result.info.count }} result{{ result.info.count === 1 ? "" : "s" }}
         </div>
-        <div
+        <router-link
           v-for="character in result.results"
           :key="character.id"
           class="result"
+          :to="`/c/${character.id}`"
         >
           <CharacterCard :character="character" />
-        </div>
+        </router-link>
         <div class="buttons" v-if="result.info.prev || result.info.next">
           <div>
             <Button v-if="result.info.prev" @click="page--">Previous</Button>
@@ -50,7 +51,7 @@
 <script lang="ts">
 import Vue from "vue";
 import debounce from "lodash/debounce";
-import { search, SearchResponse } from "@/api";
+import { searchCharacters, SearchResponse } from "@/api";
 import CharacterCard from "@/components/CharacterCard.vue";
 import Button from "@/components/Button.vue";
 
@@ -91,13 +92,13 @@ export default Vue.extend({
       try {
         const name = this.query;
         const page = this.page;
-        const result = await search({ name, page });
+        const result = await searchCharacters({ name, page });
         if (name === this.query && page === this.page) {
           this.result = result;
         }
         // eslint-disable-next-line
       } catch (e: any) {
-        if (e.response.status === 404) {
+        if (e.response?.status === 404) {
           this.result = {
             info: {
               pages: 0,
@@ -156,6 +157,9 @@ export default Vue.extend({
 
 .result {
   margin-top: var(--spacing);
+  display: block;
+  text-decoration: none;
+  color: inherit;
 }
 
 .buttons {

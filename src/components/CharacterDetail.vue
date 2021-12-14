@@ -7,20 +7,35 @@
           {{ character.name }}
         </div>
         <div class="details">
-          {{ character.location.name }}<br />
-          {{ character.species }}<br />
-          {{ character.gender }}<br />
-          {{ character.status }}<br />
-          {{ character.episode.length }}<br />
+          <div class="detail">
+            <div class="detail-title">Location</div>
+            {{ character.location.name }}
+          </div>
+          <div class="detail">
+            <div class="detail-title">Species</div>
+            {{ character.species }}
+          </div>
+          <div class="detail">
+            <div class="detail-title">Gender</div>
+            {{ character.gender }}
+          </div>
+          <div class="detail">
+            <div class="detail-title">Living Status</div>
+            {{ character.status }}
+          </div>
+          <div class="detail">
+            <div class="detail-title">Episodes Seen In</div>
+            {{ character.episode.length }}
+          </div>
         </div>
       </div>
     </div>
     <div class="title">Near</div>
-    <!-- <template v-for="(character, index) in near">
-      <div class="card" v-if="index < 5" :key="character.id">
+    <template v-for="character in near">
+      <router-link class="near" :key="character.id" :to="`/c/${character.id}`">
         <CharacterCard :character="character" />
-      </div>
-    </template> -->
+      </router-link>
+    </template>
   </div>
 </template>
 
@@ -36,6 +51,7 @@ export default Vue.extend({
   },
   props: {
     character: Object as () => Character,
+    near: Array as () => Character[],
   },
 });
 </script>
@@ -62,17 +78,27 @@ export default Vue.extend({
 }
 
 .details {
-  margin-top: var(--spacing-xsmall);
+  margin-top: var(--spacing-small);
+}
+
+.detail + .detail {
+  margin-top: var(--spacing);
+}
+
+.detail-title {
   color: var(--secondary-on-color);
 }
 
 .title {
-  margin-top: var(--spacing-xlarge);
+  margin-top: var(--spacing-large);
   font-size: var(--font-size-xlarge);
   font-weight: bold;
 }
 
-.card {
+.near {
   margin-top: var(--spacing);
+  color: inherit;
+  text-decoration: none;
+  display: block;
 }
 </style>
